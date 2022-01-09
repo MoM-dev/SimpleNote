@@ -83,10 +83,15 @@
         function addTextFromCookie() {
             let text = reviewTextarea.value;
             let encodedText = encodeURIComponent(text);
-            document.cookie = "text=" + encodedText;
+            document.cookie = "text=" + encodedText + ";" + "expires=" + limitedDate + ";";
 
             infoArea.innerText = "";
         }
+
+        let cookieLimited = 30; //Cookieの期限(30日)
+        let nowDate = new Date();
+        nowDate.setTime(nowDate.getTime() + cookieLimited * 24 * 60 * 60 * 1000);
+        let limitedDate = nowDate.toGMTString();
 
 
         let reviewTextarea = document.getElementById("reviewTextarea");
