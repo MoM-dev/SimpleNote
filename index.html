@@ -58,12 +58,11 @@
             a.remove();
             URL.revokeObjectURL(url);
 
-            msg.innerText = "テキストファイルをダウンロードしました";
+            infoArea.innerText = "テキストファイルをダウンロードしました";
 
         }
 
         function deleteButtonClick() {
-
             let deleteFlag = confirm("削除しますか?");
 
             if (deleteFlag) {
@@ -74,10 +73,11 @@
             }
         }
 
-        function addTextToCookie() {
+        function addTextArea() {
             let reviewTextarea = document.getElementById("reviewTextarea");
             let cookieArray = getCookieArray();
-            reviewTextarea.value = cookieArray["text"];
+            let text = cookieArray["text"];
+            reviewTextarea.value = text;
         }
 
         function addTextFromCookie() {
@@ -98,7 +98,12 @@
         let downloadButton = document.getElementById("saveButton");
         downloadButton.addEventListener("click", downloadButtonClick);
 
-        addTextToCookie(); //初期状態でCookie呼び出し
+        // Cookieが無いときundefinedが表示されないようにする
+        if (document.cookie == "") {
+            document.cookie = "text=";
+        }
+
+        addTextArea(); //初期状態でCookie呼び出し
 
     </script>
 
