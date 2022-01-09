@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>シンプルメモ帳</title>
+</head>
+
+<body>
+    <h1>シンプルメモ帳</h1>
+    <p>注意: 本サイトはCookieを使用しています．保存されたデータが外部サーバにアップロードされることはありません．</p>
+    <p>ブラウザを閉じても入力内容は保存されます．</p>
+
+    <div>
+        <label>メモ<br>
+            <textarea cols="120" rows="30" id="reviewTextarea" oninput="addTextFromCookie()"></textarea>
+        </label>
+    </div>
+
+    <div>
+        <input type="button" value="削除" id="deleteButton">
+        <input type="button" value="ダウンロード" id="saveButton">
+    </div>
+
+    <p id="infoArea"></p>
+
+    <br><br><br><br><br>
+
+    <p><a href=".">開発者サイト</a></p>
+    <p>(c) 2022 MoM.</p>
+
+    <script>
+        function getCookieArray() {
+            var arr = new Array();
+            if (document.cookie != "") {
+                var tmp = document.cookie.split("; ");
+                for (var i = 0; i < tmp.length; i++) {
+                    var data = tmp[i].split("=");
+                    arr[data[0]] = decodeURIComponent(data[1]);
+                }
+            }
+            return arr;
+        }
+
+        function downloadButtonClick() {
+            let cookieArray = getCookieArray();
+            let text = cookieArray["text"];
+
+            const blob = new Blob([text], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            document.body.appendChild(a);
+            a.download = 'simpleMemo.txt';
+            a.href = url;
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+
+            msg.innerText = "テキストファイルをダウンロードしました";
+
+        }
+
+        function deleteButtonClick() {
+
+            let deleteFlag = confirm("削除しますか?");
+
+            if (deleteFlag) {
+                reviewTextarea.value = "";
+                document.cookie = "text=" + "";
+
+                infoArea.innerText = "削除しました";
+            }
+        }
+
+        function addTextToCookie() {
+            let reviewTextarea = document.getElementById("reviewTextarea");
+            let cookieArray = getCookieArray();
+            reviewTextarea.value = cookieArray["text"];
+        }
+
+        function addTextFromCookie() {
+            let text = reviewTextarea.value;
+            let encodedText = encodeURIComponent(text);
+            document.cookie = "text=" + encodedText;
+
+            infoArea.innerText = "";
+        }
+
+
+        let reviewTextarea = document.getElementById("reviewTextarea");
+        let infoArea = document.getElementById("infoArea");
+
+        let deleteButton = document.getElementById("deleteButton");
+        deleteButton.addEventListener("click", deleteButtonClick);
+
+        let downloadButton = document.getElementById("saveButton");
+        downloadButton.addEventListener("click", downloadButtonClick);
+
+        addTextToCookie(); //初期状態でCookie呼び出し
+
+    </script>
+
+</body>
+
+</html>
