@@ -40,11 +40,11 @@
 
     <script>
         function getCookieArray() {
-            var arr = new Array();
+            let arr = new Array();
             if (document.cookie != "") {
-                var tmp = document.cookie.split("; ");
-                for (var i = 0; i < tmp.length; i++) {
-                    var data = tmp[i].split("=");
+                let tmp = document.cookie.split("; ");
+                for (let i = 0; i < tmp.length; i++) {
+                    let data = tmp[i].split("=");
                     arr[data[0]] = decodeURIComponent(data[1]);
                 }
             }
@@ -52,8 +52,8 @@
         }
 
         function downloadButtonClick() {
-            let cookieArray = getCookieArray();
-            let text = cookieArray["text"];
+            const cookieArray = getCookieArray();
+            const text = cookieArray["text"];
 
             const blob = new Blob([text], { type: 'text/plain' });
             const url = URL.createObjectURL(blob);
@@ -65,12 +65,12 @@
             a.remove();
             URL.revokeObjectURL(url);
 
-            infoArea.innerText = "テキストファイルをダウンロードしました";
+            infoArea.innerText = "テキストファイルをダウンロードしています";
 
         }
 
         function deleteButtonClick() {
-            let deleteFlag = confirm("削除しますか?");
+            const deleteFlag = confirm("削除しますか?");
 
             if (deleteFlag) {
                 reviewTextarea.value = "";
@@ -81,24 +81,23 @@
         }
 
         function addTextArea() {
-            let reviewTextarea = document.getElementById("reviewTextarea");
-            let cookieArray = getCookieArray();
-            let text = cookieArray["text"];
+            const cookieArray = getCookieArray();
+            const text = cookieArray["text"];
             reviewTextarea.value = text;
         }
 
         function addTextFromCookie() {
-            let text = reviewTextarea.value;
-            let encodedText = encodeURIComponent(text);
+            const text = reviewTextarea.value;
+            const encodedText = encodeURIComponent(text);
             document.cookie = "text=" + encodedText + ";" + "expires=" + limitedDate + ";";
 
             infoArea.innerText = "";
         }
 
-        let cookieLimited = 30; //Cookieの期限(30日)
+        const cookieLimited = 30; //Cookieの期限(30日)
         let nowDate = new Date();
         nowDate.setTime(nowDate.getTime() + cookieLimited * 24 * 60 * 60 * 1000);
-        let limitedDate = nowDate.toGMTString();
+        const limitedDate = nowDate.toGMTString();
 
 
         let reviewTextarea = document.getElementById("reviewTextarea");
