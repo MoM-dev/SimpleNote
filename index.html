@@ -6,117 +6,42 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>シンプルメモ帳</title>
-    <style>
-        .note label textarea {
-            min-width: 95%;
-            height: 25rem;
-        }
-    </style>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/footer.css">
 </head>
 
 <body>
-    <h1>シンプルメモ帳</h1>
-    <p>注意: 本サイトはCookieを使用しています．保存されたデータが外部サーバにアップロードされることはありません．<br>予告なくサービス公開を終了する可能性があります．データ損失の責任は取れませんのでご了承ください．</p>
-    <p>ブラウザを閉じても入力内容は保存されます．(30日間)</p>
+    <header>
+        <h1 class="indent box fit title">シンプルメモ帳</h1>
+        <div class="indent box fit caution">
+            <p class="caution-title">注意</p>
+            <p>本サイトはCookieを使用しています．保存されたデータが外部サーバにアップロードされることはありません．<br>予告なくサービス公開を終了する可能性があります．データ損失の責任は取れませんのでご了承ください．</p>
+            <p>ブラウザを閉じても入力内容は保存されます．(30日間)</p>
+        </div>      
+    </header>
 
-    <div class="note">
-        <label>メモ<br>
+    <div class="indent box note">
+        <label>
+            <p>メモ</p>
             <textarea id="reviewTextarea" oninput="addTextFromCookie()"></textarea>
             <!-- <textarea cols="120" rows="30" id="reviewTextarea" oninput="addTextFromCookie()"></textarea> -->
         </label>
     </div>
 
-    <div>
-        <input type="button" value="削除" id="deleteButton">
-        <input type="button" value="ダウンロード" id="saveButton">
+    <div class="indent box fit button-box">
+        <input class="button" type="button" value="削除" id="deleteButton">
+        <input class="button" type="button" value="ダウンロード" id="saveButton">
     </div>
 
-    <p id="infoArea"></p>
+    <p class="indent box fit" id="infoArea"></p>
 
-    <br><br><br><br><br>
+    <footer>
+        <p><a href="https://momdev.club/">開発者サイト</a></p>
+        <p>(c) 2022 MoM.</p>
+    </footer>
 
-    <p><a href="https://momdev.club/">開発者サイト</a></p>
-    <p>(c) 2022 MoM.</p>
-
-    <script>
-        function getCookieArray() {
-            let arr = new Array();
-            if (document.cookie != "") {
-                let tmp = document.cookie.split("; ");
-                for (let i = 0; i < tmp.length; i++) {
-                    let data = tmp[i].split("=");
-                    arr[data[0]] = decodeURIComponent(data[1]);
-                }
-            }
-            return arr;
-        }
-
-        function downloadButtonClick() {
-            const cookieArray = getCookieArray();
-            const text = cookieArray["text"];
-
-            const blob = new Blob([text], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            document.body.appendChild(a);
-            a.download = 'simpleMemo.txt';
-            a.href = url;
-            a.click();
-            a.remove();
-            URL.revokeObjectURL(url);
-
-            infoArea.innerText = "テキストファイルをダウンロードしています";
-
-        }
-
-        function deleteButtonClick() {
-            const deleteFlag = confirm("削除しますか?");
-
-            if (deleteFlag) {
-                reviewTextarea.value = "";
-                document.cookie = "text=" + "";
-
-                infoArea.innerText = "削除しました";
-            }
-        }
-
-        function addTextArea() {
-            const cookieArray = getCookieArray();
-            const text = cookieArray["text"];
-            reviewTextarea.value = text;
-        }
-
-        function addTextFromCookie() {
-            const text = reviewTextarea.value;
-            const encodedText = encodeURIComponent(text);
-            document.cookie = "text=" + encodedText + ";" + "expires=" + limitedDate + ";";
-
-            infoArea.innerText = "";
-        }
-
-        const cookieLimited = 30; //Cookieの期限(30日)
-        let nowDate = new Date();
-        nowDate.setTime(nowDate.getTime() + cookieLimited * 24 * 60 * 60 * 1000);
-        const limitedDate = nowDate.toGMTString();
-
-
-        let reviewTextarea = document.getElementById("reviewTextarea");
-        let infoArea = document.getElementById("infoArea");
-
-        let deleteButton = document.getElementById("deleteButton");
-        deleteButton.addEventListener("click", deleteButtonClick);
-
-        let downloadButton = document.getElementById("saveButton");
-        downloadButton.addEventListener("click", downloadButtonClick);
-
-        // Cookieが無いときundefinedが表示されないようにする
-        if (document.cookie == "") {
-            document.cookie = "text=";
-        }
-
-        addTextArea(); //初期状態でCookie呼び出し
-
-    </script>
+    <script src="js/script.js"></script>
 
 </body>
 
